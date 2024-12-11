@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AnswerDto } from './dto/app.dto';
 
@@ -6,9 +6,15 @@ import { AnswerDto } from './dto/app.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
+  //  @Get()
+  //  getHello(): string {
+  //    return this.appService.getHello();
+  //  }
+
+  // http://localhost:3000/?name=Isra&age=37
   @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  getQueryStrings(@Query('name') username, @Query('age') age): string {
+    return `${username}, ${age}`;
   }
 
   @Get('/askquestion')
@@ -21,5 +27,10 @@ export class AppController {
     return {
       answer: getAnswerDto.answer,
     };
+  }
+
+  @Get(':id')
+  getRoutePAram(@Param('id') userId): string {
+    return `${userId}`;
   }
 }
