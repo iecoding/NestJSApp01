@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Query } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AnswerDto } from './dto/app.dto';
 
@@ -6,16 +6,20 @@ import { AnswerDto } from './dto/app.dto';
 export class AppController {
   constructor(private readonly appService: AppService) {}
 
-  //  @Get()
-  //  getHello(): string {
-  //    return this.appService.getHello();
-  //  }
+  @Get()
+  getHello(@Req() req, @Res() res) {
+    // console.log(req.headers);
+    //return this.appService.getHello();
+    res.status(200).json({
+      res: this.appService.getHello(),
+    });
+  }
 
   // http://localhost:3000/?name=Isra&age=37
-  @Get()
-  getQueryStrings(@Query('name') username, @Query('age') age): string {
-    return `${username}, ${age}`;
-  }
+  // @Get()
+  // getQueryStrings(@Query('name') username, @Query('age') age): string {
+  //   return `${username}, ${age}`;
+  // }
 
   @Get('/askquestion')
   askQuestion() {
@@ -28,6 +32,26 @@ export class AppController {
       answer: getAnswerDto.answer,
     };
   }
+
+  @Post('/answer2')
+  answer2(
+    @Body() getAnswerDto: AnswerDto,
+    @Req() req,
+    @Res() res
+    ) {
+      let response;
+      let status;
+      if(req.body.answer === 'yes') {
+        response = "It is yes";
+        status = 200;
+      } else {
+        response = "It is no";
+        status = 400;
+      }
+      res.status(status).json({
+        res: response
+      });
+    }
 
   @Get(':id')
   getRoutePAram(@Param('id') userId): string {
