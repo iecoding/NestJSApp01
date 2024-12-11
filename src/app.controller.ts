@@ -1,5 +1,5 @@
 import { SumService } from './sum/sum.service';
-import { Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, Post, Query, Req, Res } from '@nestjs/common';
 import { AppService } from './app.service';
 import { AnswerDto } from './dto/app.dto';
 
@@ -57,8 +57,9 @@ export class AppController {
         response = "It is yes";
         status = 200;
       } else {
-        response = "It is no";
-        status = 400;
+        // response = "It is no";
+        // status = 400;
+        throw new BadRequestException();
       }
       res.status(status).json({
         res: response
